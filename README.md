@@ -4,7 +4,7 @@ This is a simple Blender background script that automates importing of an .obj m
 
 ## How to Use
 
-First, prepare a Blender `.blend` file that has the cameras and settings prepared for the render. The .obj model will be imported into the origin of the Scene.
+First, prepare a Blender `.blend` file that has the cameras and settings prepared for the render. The .obj model will be imported the Scene.
 **Currently, the .blend file should be setup so that the first image rendered should have the object facing Southeast.**
 
 From the command line, run it as you would a Blender [background script](https://docs.blender.org/manual/en/dev/advanced/command_line/arguments.html):
@@ -29,11 +29,13 @@ The script imports an .obj file, and triggers a render. Then it rotates the mode
 
 These are additional arguments for the python script, which have to be located *after* the `--` so that they are passed into the script.
 
-`-i` / `--input` : The path to the .obj file (if no `foldermode`), or the path to the folder containing .obj files (if `foldermode` is active)
+`-i` / `--input` `<input_path>`: The path to the .obj file (if no `foldermode`), or the path to the folder containing .obj files (if `foldermode` is active)
 
-`-o` / `--output` : The path where exported renders will be created. If absent, a folder "export" will be created in the same folder as the obj file.
+`-o` / `--output` `<output_path>`: The path where exported renders will be created. If absent, a folder "export" will be created in the same folder as the obj file.
 
 `-f` / `--foldermode` : Enables "foldermode", which means that the input path is intended to be a folder. All .obj files found (and in subfolders) will be imported and rendered (see below)
+
+`-p` / `--pos` `<X Y Z>`: Sets a position (in the form of three floats, `X Y Z`) for the imported model to be placed before the rendering. Defaults to `0 0 0`. 
 
 ## Foldermode
 

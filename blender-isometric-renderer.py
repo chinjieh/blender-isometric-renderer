@@ -6,7 +6,16 @@
 import os
 import math
 
-def import_and_export_obj(path_to_obj, render_path_root):
+class ImportSettings:
+	""" Contains settings that control how the model is imported """
+
+	def __init__(self, position_x=0, position_y=0, position_z=0):
+		self.position_x = position_x
+		self.position_y = position_y
+		self.position_z = position_z
+
+
+def import_and_export_obj(path_to_obj, render_path_root, import_settings):
 	import bpy
 
 	# import file
@@ -16,6 +25,11 @@ def import_and_export_obj(path_to_obj, render_path_root):
 
 	imported_objs = bpy.context.selected_objects[:]
 	for imported_obj in imported_objs:
+
+		# Set the object position
+		imported_obj.location[0] = import_settings.position_x
+		imported_obj.location[1] = import_settings.position_y
+		imported_obj.location[2] = import_settings.position_z
 
 		dirs = ["SE", "S", "SW", "W", "NW", "N", "NE", "E"]
 		original_output_path = bpy.data.scenes["Scene"].render.filepath
@@ -48,13 +62,13 @@ def is_obj_file(path_to_obj):
 	return os.path.splitext(path_to_obj)[1] == ".obj"
 
 
-def import_and_export(input_path, render_path_root, is_folder_mode=False):
+def import_and_export(input_path, render_path_root, import_settings, is_folder_mode=False):
 	if not is_folder_mode:
 		if not is_obj_file(input_path):
 			print("Error: Obj path provided is not a valid .obj file")
 			return;
 
-		import_and_export_obj(input_path, render_path_root)
+		import_and_export_obj(input_path, render_path_root, import_settings)
 		return;
 
 	else:
@@ -70,8 +84,19 @@ def import_and_export(input_path, render_path_root, is_folder_mode=False):
 					if (os.path.isfile(obj_path)):
 						print("Found obj file: " + obj_path)
 						export_root_folder = build_render_path_root_matching_structure(input_path, obj_path, render_path_root)
-						import_and_export_obj(obj_path, export_root_folder)
-		
+						import_and_export_obj(obj_path, export_root_folder, import_settings)
+
+
+def build_import_settings(args):
+	import_settings = ImportSettings()
+
+	if args.positions:
+		import_settings.position_x = args.positions[0]
+		import_settings.position_y = args.positions[1]
+		import_settings.position_z = args.positions[2]
+
+	return import_settings
+
 
 def main():
 	import sys       # to get command line args
@@ -101,6 +126,9 @@ def main():
 
 	parser.add_argument("-f", "--foldermode", default=False, dest="foldermode", action='store_true', 
 		help="Folder mode; Assumes the input path is a folder containing obj files",)
+
+	parser.add_argument("-p", "--pos", dest="positions", metavar="X Y Z", nargs=3, type=float,
+		help="Defines the position of the object in the Scene. Provide as 3 floats separated by a space.")
 	
 	args = parser.parse_args(argv)
 	if not argv:
@@ -119,7 +147,9 @@ def main():
 	else:
 		output_path = os.path.abspath(args.output_path)
 
-	import_and_export(input_obj_path, output_path, is_folder_mode=args.foldermode)
+	import_settings = build_import_settings(args)
+
+	import_and_export(input_obj_path, output_path, import_settings, is_folder_mode=args.foldermode)
 	print("Done.")
 
 
