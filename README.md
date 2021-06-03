@@ -17,7 +17,7 @@ $ blender --background "<path_to_blend_file>" -x 1 --python blender-isometric-re
 
 This takes the .blend file located at `path_to_blend_file` and runs the script, importing an .obj at `path_to_obj` and renderering images at the default folder "export" created in the same root folder as the .obj file.
 
-The output will be eight images of the name **obj_name-<DIRECTION>** in the export folder.
+The output will be eight images of the name **obj_name-DIRECTION** in the export folder.
 
 For example, if the obj file name was **model.obj**, the images would be named **model-SE**, **model-S**, **model-SW** etc.
 
