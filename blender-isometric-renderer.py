@@ -147,6 +147,11 @@ def main():
 	else:
 		output_path = os.path.abspath(args.output_path)
 
+	if os.path.exists(output_path) and os.path.samefile(input_path, output_path):
+		print("Error: The input path and output paths are the same, aborting to prevent overwriting source work.")
+		print("Input: %s" % input_path)
+		return
+
 	import_settings = build_import_settings(args)
 
 	import_and_export(input_obj_path, output_path, import_settings, is_folder_mode=args.foldermode)
