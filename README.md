@@ -30,7 +30,9 @@ The script imports an .obj file, and triggers a render. Then it rotates the mode
 These are additional arguments for the python script, which have to be located *after* the `--` so that they are passed into the script.
 
 `-i` / `--input` : The path to the .obj file (if no `foldermode`), or the path to the folder containing .obj files (if `foldermode` is active)
+
 `-o` / `--output` : The path where exported renders will be created. If absent, a folder "export" will be created in the same folder as the obj file.
+
 `-f` / `--foldermode` : Enables "foldermode", which means that the input path is intended to be a folder. All .obj files found (and in subfolders) will be imported and rendered (see below)
 
 ## Foldermode
